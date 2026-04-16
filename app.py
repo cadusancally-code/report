@@ -153,8 +153,7 @@ df_view = df[[col_data, col_recebidas, col_tratadas]]
 st.dataframe(df_view)
 
 st.download_button("Download PPT", f, file_name=file)
-import streamlit as st
-import pandas as pd
+
 st.subheader("Dados detalhados")
 df_view = df[[col_data, col_recebidas, col_tratadas]]
 st.dataframe(df_view)
