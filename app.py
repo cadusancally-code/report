@@ -79,31 +79,22 @@ with col3:
     if st.button("PPT"):
         file = export_ppt(df)
         with open(file, "rb") as f:
-          
-
 st.set_page_config(layout="wide")
-
 URL = "https://docs.google.com/spreadsheets/d/1Mb50lQlW5ygqYhfY8RcMnjakxTa2zF-Yp6QID4pmJ80/export?format=csv&gid=901404078"
-
 df = pd.read_csv(URL)
 df.columns = df.columns.str.strip()
-
 # =========================
 # CONFIGURAÇÃO (SIDEBAR)
 # =========================
 st.sidebar.title("Configuração de Dados")
-
 col_data = st.sidebar.selectbox("📅 Coluna de Data", df.columns)
 col_recebidas = st.sidebar.selectbox("📥 Coluna Recebidas", df.columns)
 col_tratadas = st.sidebar.selectbox("📤 Coluna Tratadas", df.columns)
-
 # RENOMEAÇÃO VISUAL (opcional)
 st.sidebar.markdown("### 🏷️ Renomear no Dashboard")
-
 nome_data = st.sidebar.text_input("Nome para Data", "Data")
 nome_recebidas = st.sidebar.text_input("Nome para Recebidas", "Recebidas")
 nome_tratadas = st.sidebar.text_input("Nome para Tratadas", "Tratadas")
-
 # =========================
 # TRATAMENTO
 # =========================
@@ -170,6 +161,11 @@ st.dataframe(df_view)
 # =========================
 # DOWNLOAD
 # =========================
+st.download_button(
+    "Download PPT",
+    data=b"arquivo",
+    file_name="relatorio.pptx"
+)# DOWNLOAD
 st.download_button(
     "Download PPT",
     data=b"arquivo",
