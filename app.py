@@ -170,4 +170,25 @@ st.download_button(
     "Download PPT",
     data=b"arquivo",
     file_name="relatorio.pptx"
-)
+)with col1:
+    if st.button("Excel"):
+        file = export_excel(df)
+
+        with open(file, "rb") as f:
+            st.download_button(
+                "Download Excel",
+                data=f,
+                file_name="relatorio.xlsx"
+            )
+
+
+with col2:
+    if st.button("PNG"):
+        file = export_png(df)
+
+        with open(file, "rb") as f:
+            st.download_button(
+                "Download PNG",
+                data=f,
+                file_name="grafico.png"
+            )
