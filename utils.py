@@ -140,6 +140,5 @@ def load_data(url):
     df['tratadas'] = pd.to_numeric(df['tratadas'], errors='coerce').fillna(0)
 
     return SyntaxError em:
-from utils import load_data, get_labels
-from utils import load_data, get_labels
-SyntaxError em import utils
+
+

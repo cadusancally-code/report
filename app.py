@@ -147,5 +147,9 @@ st.subheader("Dados detalhados")
 
 df_view = df[[col_data, col_recebidas, col_tratadas]]
 st.dataframe(df_view)
-from utils import load_data, get_labels
+
+st.download_button("Download PPT", f, file_name=file)
+df_view = df[[col_data, col_recebidas, col_tratadas]]
+st.dataframe(df_view)
+
 st.download_button("Download PPT", f, file_name=file)
