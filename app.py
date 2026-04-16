@@ -79,4 +79,72 @@ with col3:
     if st.button("PPT"):
         file = export_ppt(df)
         with open(file, "rb") as f:
-            st.download_button("Download PPT", f, file_name=file)
+            st.download_button("Download PPT", f, file_name=file)import streamlit as st
+import pandas as pd
+
+st.set_page_config(layout="wide")
+
+URL = "https://docs.google.com/spreadsheets/d/1Mb50lQlW5ygqYhfY8RcMnjakxTa2zF-Yp6QID4pmJ80/export?format=csv&gid=901404078"
+
+df = pd.read_csv(URL)
+df.columns = df.columns.str.strip()
+
+# =========================
+# CONFIGURAÇÃO (SIDEBAR)
+# =========================
+st.sidebar.title("Configuração de Dados")
+
+col_data = st.sidebar.selectbox("📅 Coluna de Data", df.columns)
+col_recebidas = st.sidebar.selectbox("📥 Coluna Recebidas", df.columns)
+col_tratadas = st.sidebar.selectbox("📤 Coluna Tratadas", df.columns)
+
+# RENOMEAÇÃO VISUAL (opcional)
+st.sidebar.markdown("### 🏷️ Renomear no Dashboard")
+
+nome_data = st.sidebar.text_input("Nome para Data", "Data")
+nome_recebidas = st.sidebar.text_input("Nome para Recebidas", "Recebidas")
+nome_tratadas = st.sidebar.text_input("Nome para Tratadas", "Tratadas")
+
+# =========================
+# TRATAMENTO
+# =========================
+df['data'] = pd.to_datetime(df[col_data], errors='coerce')
+df['recebidas'] = pd.to_numeric(df[col_recebidas], errors='coerce').fillna(0)
+df['tratadas'] = pd.to_numeric(df[col_tratadas], errors='coerce').fillna(0)
+
+df['semana'] = df['data'].dt.isocalendar().week
+df['mes'] = df['data'].dt.month
+
+# =========================
+# KPIs
+# =========================
+total_r = df['recebidas'].sum()
+total_t = df['tratadas'].sum()
+sla = (total_t / total_r * 100) if total_r > 0 else 0
+backlog = total_r - total_t
+
+c1, c2, c3, c4 = st.columns(4)
+
+c1.metric(nome_recebidas, int(total_r))
+c2.metric(nome_tratadas, int(total_t))
+c3.metric("SLA (%)", f"{sla:.2f}%")
+c4.metric("Backlog", int(backlog))
+
+# =========================
+# GRÁFICO
+# =========================
+st.subheader("Evolução")
+
+grafico = df.groupby('data')[['recebidas','tratadas']].sum()
+grafico.columns = [nome_recebidas, nome_tratadas]
+
+st.line_chart(grafico)
+
+# =========================
+# TABELA
+# =========================
+st.subheader("Dados detalhados")
+
+df_view = df[[col_data, col_recebidas, col_tratadas]]
+st.dataframe(df_view)
+from utils import load_data, get_labels

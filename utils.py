@@ -139,4 +139,7 @@ def load_data(url):
     df['recebidas'] = pd.to_numeric(df['recebidas'], errors='coerce').fillna(0)
     df['tratadas'] = pd.to_numeric(df['tratadas'], errors='coerce').fillna(0)
 
-    return 
+    return SyntaxError em:
+from utils import load_data, get_labels
+from utils import load_data, get_labels
+from utils import load_data, get_labels
