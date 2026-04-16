@@ -32,3 +32,7 @@ def export_ppt(df):
     prs.save(file)
 
     return file
+try:
+    file_path = export_excel(df)
+except:
+    st.error("Erro ao gerar arquivo")
