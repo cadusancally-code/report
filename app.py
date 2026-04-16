@@ -79,8 +79,7 @@ with col3:
     if st.button("PPT"):
         file = export_ppt(df)
         with open(file, "rb") as f:
-            st.download_button("Download PPT", f, file_name=file)import streamlit as st
-import pandas as pd
+          
 
 st.set_page_config(layout="wide")
 
@@ -153,7 +152,6 @@ df_view = df[[col_data, col_recebidas, col_tratadas]]
 st.dataframe(df_view)
 
 st.download_button("Download PPT", f, file_name=file)
-
 st.subheader("Dados detalhados")
 df_view = df[[col_data, col_recebidas, col_tratadas]]
 st.dataframe(df_view)
