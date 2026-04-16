@@ -55,3 +55,75 @@ st.subheader("Dados detalhados")
 
 df_view = df[[col_data, col_recebidas, col_tratadas]]
 st.dataframe(df_view)
+st.subheader("📦 Total de Pedidos")
+
+total_pedidos = df[col_data].count()
+st.metric("Total de pedidos", total_pedidos)
+st.subheader("📅 Pedidos por Data")
+
+por_data = df.groupby(col_data).size().reset_index(name="quantidade")
+
+st.dataframe(por_data)
+st.line_chart(por_data.set_index(col_data))
+col_assistente = st.sidebar.selectbox("Coluna Assistente", df.columns)
+st.subheader("👤 Pedidos por Assistente")
+
+por_assistente = df.groupby(col_assistente).size().reset_index(name="quantidade")
+
+st.dataframe(por_assistente)
+data_min = df['data'].min()
+data_max = df['data'].max()
+
+periodo = st.date_input("Filtrar período", [data_min, data_max])
+
+df = df[(df['data'] >= pd.to_datetime(periodo[0])) & (df['data'] <= pd.to_datetime(periodo[1]))]
+df = df.loc[:, ~df.columns.duplicated()]
+# renomear colunas duplicadas automaticamente
+cols = []
+contador = {}
+
+for col in df.columns:
+    if col in contador:
+        contador[col] += 1
+        cols.append(f"{col}_{contador[col]}")
+    else:
+        contador[col] = 0
+        cols.append(col)
+
+df.columns = cols
+total_pedidos = df['Código do pedido'].count()
+cols = []
+contador = {}
+
+for col in df.columns:
+    if col in contador:
+        contador[col] += 1
+        cols.append(f"{col}_{contador[col]}")
+    else:
+        contador[col] = 0
+        cols.append(col)
+
+df.columns = cols
+# pegar todas colunas que tem "Código do pedido"
+cols_pedido = [col for col in df.columns if "Código do pedido" in col]
+
+# transformar em uma única coluna
+df_pedidos = df[cols_pedido].melt(value_name="pedido").dropna()
+
+# remover vazios
+df_pedidos = df_pedidos[df_pedidos["pedido"] != ""]
+total_pedidos = df_pedidos["pedido"].count()
+
+st.metric("Total de pedidos", total_pedidos)
+df_expandido = df.melt(
+    id_vars=[col_data, col_assistente],
+    value_vars=cols_pedido,
+    value_name="pedido"
+).dropna()
+
+df_expandido = df_expandido[df_expandido["pedido"] != ""]
+por_data = df_expandido.groupby(col_data).size()
+st.line_chart(por_data)
+por_assistente = df_expandido.groupby(col_assistente).size()
+st.dataframe(por_assistente)
+count()
