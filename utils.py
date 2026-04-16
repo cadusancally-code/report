@@ -142,4 +142,4 @@ def load_data(url):
     return SyntaxError em:
 from utils import load_data, get_labels
 from utils import load_data, get_labels
-from utils import load_data, get_labels
+SyntaxError em import utils
